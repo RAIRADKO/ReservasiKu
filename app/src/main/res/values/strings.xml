@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ReservasiKu</string>
+
+    <string name="nav_home">Beranda</string>
+    <string name="nav_reservations">Riwayat</string>
+    <string name="nav_notifications">Notifikasi</string>
+    <string name="nav_profile">Profil</string>
+
+    <string name="app_title">ReservasiKu</string>
+    <string name="app_subtitle">Reservasi Meja Restoran</string>
+
+    <string name="login_title">Masuk ke Akun Anda</string>
+    <string name="register_title">Buat Akun Baru</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Kata Sandi</string>
+    <string name="name_hint">Nama Lengkap</string>
+    <string name="login_button">Masuk</string>
+    <string name="register_button">Daftar</string>
+    <string name="switch_to_register">Belum punya akun? Daftar</string>
+    <string name="switch_to_login">Sudah punya akun? Masuk</string>
+
+    <string name="welcome">Selamat datang,</string>
+    <string name="active_reservation">Reservasi Aktif</string>
+    <string name="quick_stats">Statistik Cepat</string>
+    <string name="total_reservations">Total Reservasi</string>
+    <string name="this_month">Bulan Ini</string>
+    <string name="new_reservation">Buat Reservasi Baru</string>
+
+    <string name="status_pending">Menunggu</string>
+    <string name="status_confirmed">Dikonfirmasi</string>
+    <string name="status_cancelled">Dibatalkan</string>
+
+    <string name="select_date_time">Pilih Tanggal & Waktu</string>
+    <string name="select_people">Jumlah Tamu</string>
+    <string name="select_table">Pilih Meja</string>
+    <string name="continue_button">Lanjutkan</string>
+    <string name="back_button">Kembali</string>
+
+    <string name="reservation_details">Detail Reservasi</string>
+    <string name="confirm_reservation">Konfirmasi Reservasi</string>
+    <string name="date_time">Tanggal & Waktu</string>
+    <string name="table_number">Meja</string>
+    <string name="guest_count">Tamu</string>
+
+    <string name="profile_title">Profil Saya</string>
+    <string name="logout">Keluar</string>
+    <string name="edit_profile">Edit Profil</string>
+    <string name="settings">Pengaturan</string>
+    <string name="help">Bantuan</string>
+    <string name="about">Tentang</string>
+
+    <string name="notifications_title">Notifikasi</string>
+    <string name="no_notifications">Tidak ada notifikasi</string>
+    <string name="mark_as_read">Tandai sudah dibaca</string>
+
+    <string name="reservation_history">Riwayat Reservasi</string>
+    <string name="filter_all">Semua</string>
+    <string name="filter_confirmed">Dikonfirmasi</string>
+    <string name="filter_pending">Menunggu</string>
+    <string name="filter_cancelled">Dibatalkan</string>
+
+    <string name="onboarding_skip">Lewati</string>
+    <string name="onboarding_next">Selanjutnya</string>
+    <string name="onboarding_start">Mulai</string>
+
+    <string name="onboarding_title_1">Reservasi Mudah</string>
+    <string name="onboarding_desc_1">Pesan meja restoran favorit Anda dengan mudah dan cepat</string>
+
+    <string name="onboarding_title_2">Kelola Reservasi</string>
+    <string name="onboarding_desc_2">Lihat, ubah, atau batalkan reservasi Anda kapan saja</string>
+
+    <string name="onboarding_title_3">Notifikasi Real-time</string>
+    <string name="onboarding_desc_3">Dapatkan pemberitahuan instant untuk konfirmasi reservasi</string>
+
+    <string name="ok">OK</string>
+    <string name="cancel">Batal</string>
+    <string name="save">Simpan</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Hapus</string>
+    <string name="search">Cari</string>
+    <string name="loading">Memuat…</string>
+    <string name="error">Terjadi kesalahan</string>
+    <string name="retry">Coba Lagi</string>
+
+    <string name="today">Hari ini</string>
+    <string name="tomorrow">Besok</string>
+    <string name="select_date">Pilih Tanggal</string>
+    <string name="select_time">Pilih Waktu</string>
+
+    <string name="table_for_2">Meja untuk 2 orang</string>
+    <string name="table_for_4">Meja untuk 4 orang</string>
+    <string name="table_for_6">Meja untuk 6 orang</string>
+    <string name="table_for_8">Meja untuk 8 orang</string>
+    <string name="table_available">Tersedia</string>
+    <string name="table_occupied">Terisi</string>
+</resources>

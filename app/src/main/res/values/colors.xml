@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary_blue">#0000FF</color>
+    <color name="primary_blue_variant">#0000CC</color>
+
+    <color name="secondary_orange">#FFA500</color>
+    <color name="secondary_orange_variant">#FF8C00</color>
+
+    <color name="success_green">#00C853</color>
+    <color name="danger_red">#E53935</color>
+    <color name="warning_yellow">#FFB300</color>
+
+    <color name="background_gray">#F9F9F9</color>
+    <color name="surface_white">#FFFFFF</color>
+
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="text_disabled">#BDBDBD</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="divider">#1A000000</color>
+
+    <color name="ripple_primary">#1A0000FF</color>
+    <color name="ripple_surface">#1A000000</color>
+
+    <color name="shadow">#1A000000</color>
+</resources>
