@@ -1,5 +1,6 @@
 package com.restaurant.reservation.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -24,16 +25,16 @@ import com.restaurant.reservation.R
 import com.restaurant.reservation.model.Table
 import com.restaurant.reservation.model.TableSelectionData
 import com.restaurant.reservation.ui.theme.PrimaryBlue
-import com.restaurant.reservation.ui.theme.RestaurantReservationTheme
 import com.restaurant.reservation.ui.theme.TextDisabled
 import com.restaurant.reservation.viewmodel.AppViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import androidx.lifecycle.viewmodel.compose.viewModel // Perbaikan: Tambahkan import viewModel()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TableSelectionScreen(viewModel: AppViewModel) {
+fun TableSelectionScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: Gunakan viewModel() untuk membuat instance
     var step by remember { mutableStateOf(1) }
     var selectedDate by remember { mutableStateOf("2024-10-27") } // Placeholder
     var selectedTime by remember { mutableStateOf("19:00") } // Placeholder

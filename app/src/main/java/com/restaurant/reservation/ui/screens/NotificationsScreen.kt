@@ -26,10 +26,11 @@ import com.restaurant.reservation.model.NotificationItem
 import com.restaurant.reservation.ui.theme.PrimaryBlue
 import com.restaurant.reservation.ui.theme.RestaurantReservationTheme
 import com.restaurant.reservation.viewmodel.AppViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel // Perbaikan: Tambahkan import viewModel()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NotificationsScreen(viewModel: AppViewModel) {
+fun NotificationsScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: Gunakan viewModel() untuk membuat instance
     val notifications by viewModel.notifications.collectAsState()
     val unreadCount = notifications.count { !it.isRead }
 

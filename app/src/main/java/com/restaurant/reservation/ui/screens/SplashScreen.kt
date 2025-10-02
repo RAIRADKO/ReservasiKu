@@ -29,9 +29,10 @@ import com.restaurant.reservation.ui.theme.PrimaryBlue
 import com.restaurant.reservation.ui.theme.TextPrimary
 import com.restaurant.reservation.ui.theme.TextSecondary
 import com.restaurant.reservation.viewmodel.AppViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel // Perbaikan: Tambahkan import viewModel()
 
 @Composable
-fun SplashScreen(viewModel: AppViewModel) {
+fun SplashScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: Gunakan viewModel() untuk membuat instance
     val scale = remember { Animatable(0f) }
 
     LaunchedEffect(Unit) {

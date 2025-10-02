@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.RestaurantReservation" parent="android:Theme.Material.DayNight.NoActionBar">
+    <style name="Theme.RestaurantReservation" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:statusBarColor">@color/primary_blue</item>
         <item name="android:navigationBarColor">@color/surface_white</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar">true</item>
+    </style>
+
+    <style name="Theme.ReservasiKu" parent="android:Theme.Material.Light.NoActionBar">
+        <!--
+            You can add customizations here for status bar color, etc.
+            For a Compose-first app, this is mainly for the splash screen
+            and components before Compose takes over the UI.
+        -->
     </style>
 </resources>

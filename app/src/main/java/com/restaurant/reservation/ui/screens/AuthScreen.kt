@@ -20,9 +20,10 @@ import com.restaurant.reservation.model.User
 import com.restaurant.reservation.ui.theme.PrimaryBlue
 import com.restaurant.reservation.ui.theme.RestaurantReservationTheme
 import com.restaurant.reservation.viewmodel.AppViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel // Perbaikan: Tambahkan import untuk viewModel()
 
 @Composable
-fun AuthScreen(viewModel: AppViewModel) {
+fun AuthScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: Gunakan viewModel() untuk membuat instance
     var isLogin by remember { mutableStateOf(true) }
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }

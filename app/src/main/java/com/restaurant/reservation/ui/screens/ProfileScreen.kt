@@ -33,10 +33,11 @@ import com.restaurant.reservation.ui.theme.DangerRed
 import com.restaurant.reservation.ui.theme.PrimaryBlue
 import com.restaurant.reservation.ui.theme.RestaurantReservationTheme
 import com.restaurant.reservation.viewmodel.AppViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel // Perbaikan: Tambahkan import viewModel()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(viewModel: AppViewModel) {
+fun ProfileScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: Gunakan viewModel() untuk membuat instance
     val user by viewModel.user.collectAsState()
 
     Column(

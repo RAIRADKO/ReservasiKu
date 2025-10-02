@@ -25,6 +25,7 @@ import com.restaurant.reservation.R
 import com.restaurant.reservation.ui.theme.PrimaryBlue
 import com.restaurant.reservation.viewmodel.AppViewModel
 import kotlinx.coroutines.launch
+import androidx.lifecycle.viewmodel.compose.viewModel // Perbaikan: Tambahkan import viewModel()
 
 data class OnboardingSlide(
     val icon: ImageVector,
@@ -52,8 +53,8 @@ private val slides = listOf(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun OnboardingScreen(viewModel: AppViewModel) {
-    val pagerState = rememberPagerState(pageCount = { slides.size })
+fun OnboardingScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: Gunakan viewModel() untuk membuat instance
+    val pagerState = rememberPagerState(initialPage = 0, pageCount = { slides.size }) // Perbaikan: Gunakan API terbaru
     val coroutineScope = rememberCoroutineScope()
 
     Column(

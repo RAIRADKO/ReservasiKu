@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.restaurant.reservation.model.NavigationTab
 import com.restaurant.reservation.ui.theme.PrimaryBlue
+import androidx.compose.ui.graphics.Color // Perbaikan: Tambahkan import Color
 
 @Composable
 fun BottomNavigationBar(

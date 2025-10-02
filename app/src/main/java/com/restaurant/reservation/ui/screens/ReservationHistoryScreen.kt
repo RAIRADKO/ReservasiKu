@@ -29,10 +29,11 @@ import com.restaurant.reservation.ui.theme.RestaurantReservationTheme
 import com.restaurant.reservation.viewmodel.AppViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
+import androidx.lifecycle.viewmodel.compose.viewModel // Perbaikan: Tambahkan import viewModel()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ReservationHistoryScreen(viewModel: AppViewModel) {
+fun ReservationHistoryScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: Gunakan viewModel() untuk membuat instance
     val reservations by viewModel.reservationHistory.collectAsState()
     var selectedFilter by remember { mutableStateOf(stringResource(id = R.string.filter_all)) }
 

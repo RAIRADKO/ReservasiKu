@@ -53,9 +53,10 @@ import com.restaurant.reservation.ui.theme.SuccessGreen
 import com.restaurant.reservation.viewmodel.AppViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
+import androidx.lifecycle.viewmodel.compose.viewModel // Perbaikan: Tambahkan import viewModel()
 
 @Composable
-fun HomeScreen(viewModel: AppViewModel) {
+fun HomeScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: Gunakan viewModel() untuk membuat instance
     val user by viewModel.user.collectAsState()
     val activeReservation by viewModel.activeReservation.collectAsState()
 
@@ -263,8 +264,7 @@ fun EmptyReservationState(onButtonClick: () -> Unit) {
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = stringResource(id = R.string.no_active_reservations),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(8.dp))

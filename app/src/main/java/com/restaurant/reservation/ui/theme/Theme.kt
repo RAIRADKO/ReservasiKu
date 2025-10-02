@@ -6,7 +6,6 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-// Color scheme based on the original design
 val PrimaryBlue = Color(0xFF0000FF)
 val SecondaryOrange = Color(0xFFFFA500)
 val SuccessGreen = Color(0xFF00C853)
@@ -19,6 +18,8 @@ val MutedGray = Color(0xFF757575)
 private val LightColorScheme = lightColorScheme(
     primary = PrimaryBlue,
     onPrimary = Color.White,
+    primaryContainer = PrimaryBlue.copy(alpha = 0.1f), // Perbaikan: Tambahkan primaryContainer
+    onPrimaryContainer = PrimaryBlue, // Perbaikan: Tambahkan onPrimaryContainer
     secondary = SecondaryOrange,
     onSecondary = Color.White,
     tertiary = SuccessGreen,
@@ -40,6 +41,8 @@ private val LightColorScheme = lightColorScheme(
 private val DarkColorScheme = darkColorScheme(
     primary = Color(0xFF8BB5FF),
     onPrimary = Color(0xFF1A1A1A),
+    primaryContainer = Color(0xFF4CAF50).copy(alpha = 0.3f), // Perbaikan: Tambahkan primaryContainer
+    onPrimaryContainer = Color(0xFFE0E0E0), // Perbaikan: Tambahkan onPrimaryContainer
     secondary = Color(0xFFFFB74D),
     onSecondary = Color(0xFF1A1A1A),
     tertiary = Color(0xFF4CAF50),
@@ -72,7 +75,7 @@ fun RestaurantReservationTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        shapes = Shapes,
+        shapes = Shapes, // Perbaikan: Tambahkan Shapes
         content = content
     )
 }
