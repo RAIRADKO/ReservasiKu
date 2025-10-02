@@ -29,8 +29,8 @@ import java.util.Locale
 @Composable
 fun TableSelectionScreen(viewModel: AppViewModel) {
     var step by remember { mutableStateOf(1) }
-    var selectedDate by remember { mutableStateOf("") }
-    var selectedTime by remember { mutableStateOf("") }
+    var selectedDate by remember { mutableStateOf("2024-10-27") } // Placeholder
+    var selectedTime by remember { mutableStateOf("19:00") } // Placeholder
     var peopleCount by remember { mutableStateOf(2) }
     var selectedTable by remember { mutableStateOf<Int?>(null) }
     val tables = listOf(
@@ -86,7 +86,14 @@ fun TableSelectionScreen(viewModel: AppViewModel) {
                                 style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Medium)
                             )
                             Spacer(modifier = Modifier.height(16.dp))
-                            // Implement Date Picker here
+                            // Placeholder for Date Picker
+                            OutlinedButton(onClick = { /* TODO: Open Date Picker */ }, modifier = Modifier.fillMaxWidth()) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(Icons.Default.CalendarMonth, contentDescription = null)
+                                    Spacer(Modifier.width(8.dp))
+                                    Text(selectedDate.ifBlank { "Pilih tanggal" })
+                                }
+                            }
                         }
                         2 -> {
                             Text(
@@ -94,7 +101,14 @@ fun TableSelectionScreen(viewModel: AppViewModel) {
                                 style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Medium)
                             )
                             Spacer(modifier = Modifier.height(16.dp))
-                            // Implement Time Picker here
+                            // Placeholder for Time Picker
+                            OutlinedButton(onClick = { /* TODO: Open Time Picker */ }, modifier = Modifier.fillMaxWidth()) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(Icons.Default.Schedule, contentDescription = null)
+                                    Spacer(Modifier.width(8.dp))
+                                    Text(selectedTime.ifBlank { "Pilih jam" })
+                                }
+                            }
                         }
                         3 -> {
                             Text(
@@ -102,7 +116,24 @@ fun TableSelectionScreen(viewModel: AppViewModel) {
                                 style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Medium)
                             )
                             Spacer(modifier = Modifier.height(16.dp))
-                            // Implement People Count selection here
+                            // Placeholder for People Count selection
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                IconButton(onClick = { if (peopleCount > 1) peopleCount-- }) {
+                                    Icon(Icons.Default.ArrowBack, contentDescription = "Kurangi")
+                                }
+                                Text(
+                                    text = "$peopleCount orang",
+                                    style = MaterialTheme.typography.displaySmall,
+                                    modifier = Modifier.padding(horizontal = 16.dp)
+                                )
+                                IconButton(onClick = { peopleCount++ }) {
+                                    Icon(Icons.Default.ArrowForward, contentDescription = "Tambah")
+                                }
+                            }
                         }
                         4 -> {
                             Text(
@@ -110,7 +141,7 @@ fun TableSelectionScreen(viewModel: AppViewModel) {
                                 style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Medium)
                             )
                             Spacer(modifier = Modifier.height(16.dp))
-                            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                            FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                                 availableTables.forEach { (id, seats) ->
                                     TableCard(
                                         id = id,

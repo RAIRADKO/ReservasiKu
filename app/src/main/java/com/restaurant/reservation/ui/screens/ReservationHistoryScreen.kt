@@ -19,6 +19,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.restaurant.reservation.model.Reservation
 import com.restaurant.reservation.model.ReservationStatus
+import com.restaurant.reservation.ui.theme.DangerRed
+import com.restaurant.reservation.ui.theme.SecondaryOrange
+import com.restaurant.reservation.ui.theme.SuccessGreen
 import com.restaurant.reservation.ui.theme.RestaurantReservationTheme
 import com.restaurant.reservation.viewmodel.AppViewModel
 import java.text.SimpleDateFormat
@@ -114,6 +117,18 @@ fun ReservationHistoryScreen(viewModel: AppViewModel) {
 
 @Composable
 fun ReservationItemCard(reservation: Reservation) {
+    val statusColor = when (reservation.status) {
+        ReservationStatus.CONFIRMED -> SuccessGreen
+        ReservationStatus.PENDING -> SecondaryOrange
+        ReservationStatus.CANCELLED -> DangerRed
+    }
+
+    val statusText = when (reservation.status) {
+        ReservationStatus.CONFIRMED -> "Dikonfirmasi"
+        ReservationStatus.PENDING -> "Menunggu"
+        ReservationStatus.CANCELLED -> "Dibatalkan"
+    }
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -123,28 +138,38 @@ fun ReservationItemCard(reservation: Reservation) {
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
-            Text(
-                text = "Meja #${reservation.table}",
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium)
-            )
-            Text(
-                text = "Status: ${reservation.status}",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Meja #${reservation.table}",
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium)
+                )
+                Text(
+                    text = statusText,
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        color = statusColor,
+                        fontWeight = FontWeight.Medium
+                    )
+                )
+            }
             Spacer(modifier = Modifier.height(8.dp))
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
                     text = "${formatDate(reservation.date)} • ${reservation.time}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 )
                 Text(
                     text = "${reservation.people} orang",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 )
             }
         }

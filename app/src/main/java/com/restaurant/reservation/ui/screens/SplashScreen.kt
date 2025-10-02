@@ -26,6 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.restaurant.reservation.R
 import com.restaurant.reservation.ui.theme.PrimaryBlue
+import com.restaurant.reservation.ui.theme.TextPrimary
+import com.restaurant.reservation.ui.theme.TextSecondary
 import com.restaurant.reservation.viewmodel.AppViewModel
 
 @Composable
@@ -43,7 +45,7 @@ fun SplashScreen(viewModel: AppViewModel) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(PrimaryBlue),
+            .background(Color.White),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -68,7 +70,7 @@ fun SplashScreen(viewModel: AppViewModel) {
             Text(
                 text = "ReservasiKu",
                 style = MaterialTheme.typography.displayMedium.copy(
-                    color = Color.White,
+                    color = TextPrimary,
                     fontWeight = FontWeight.Bold,
                     fontSize = 32.sp
                 ),
@@ -78,7 +80,7 @@ fun SplashScreen(viewModel: AppViewModel) {
             Text(
                 text = "Reservasi Meja Restoran",
                 style = MaterialTheme.typography.bodyLarge.copy(
-                    color = Color.White.copy(alpha = 0.8f),
+                    color = TextSecondary,
                     fontSize = 16.sp
                 ),
                 modifier = Modifier.scale(scale.value)
