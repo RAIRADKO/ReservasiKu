@@ -53,10 +53,9 @@ import com.restaurant.reservation.ui.theme.SuccessGreen
 import com.restaurant.reservation.viewmodel.AppViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
-import androidx.lifecycle.viewmodel.compose.viewModel // Perbaikan: Tambahkan import viewModel()
 
 @Composable
-fun HomeScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: Gunakan viewModel() untuk membuat instance
+fun HomeScreen(viewModel: AppViewModel) {
     val user by viewModel.user.collectAsState()
     val activeReservation by viewModel.activeReservation.collectAsState()
 

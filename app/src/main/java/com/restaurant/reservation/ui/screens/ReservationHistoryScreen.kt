@@ -6,36 +6,30 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.TableRestaurant
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.restaurant.reservation.R
 import com.restaurant.reservation.model.Reservation
 import com.restaurant.reservation.model.ReservationStatus
 import com.restaurant.reservation.ui.theme.DangerRed
+import com.restaurant.reservation.ui.theme.PrimaryBlue
 import com.restaurant.reservation.ui.theme.SecondaryOrange
 import com.restaurant.reservation.ui.theme.SuccessGreen
-import com.restaurant.reservation.ui.theme.RestaurantReservationTheme
 import com.restaurant.reservation.viewmodel.AppViewModel
-import java.text.SimpleDateFormat
-import java.util.Locale
-import androidx.lifecycle.viewmodel.compose.viewModel // Perbaikan: Tambahkan import viewModel()
+import com.restaurant.reservation.util.formatDate
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ReservationHistoryScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: Gunakan viewModel() untuk membuat instance
+fun ReservationHistoryScreen(viewModel: AppViewModel = viewModel()) {
     val reservations by viewModel.reservationHistory.collectAsState()
-    var selectedFilter by remember { mutableStateOf(stringResource(id = R.string.filter_all)) }
+    var selectedFilter by remember { mutableStateOf(R.string.filter_all) }
 
     Column(
         modifier = Modifier
@@ -73,23 +67,23 @@ fun ReservationHistoryScreen(viewModel: AppViewModel = viewModel()) { // Perbaik
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             FilterChip(
-                selected = selectedFilter == stringResource(id = R.string.filter_all),
-                onClick = { selectedFilter = "Semua" },
+                selected = selectedFilter == R.string.filter_all,
+                onClick = { selectedFilter = R.string.filter_all },
                 label = { Text(stringResource(id = R.string.filter_all)) }
             )
             FilterChip(
-                selected = selectedFilter == stringResource(id = R.string.status_confirmed),
-                onClick = { selectedFilter = "Dikonfirmasi" },
+                selected = selectedFilter == R.string.filter_confirmed,
+                onClick = { selectedFilter = R.string.filter_confirmed },
                 label = { Text(stringResource(id = R.string.filter_confirmed)) }
             )
             FilterChip(
-                selected = selectedFilter == stringResource(id = R.string.status_pending),
-                onClick = { selectedFilter = "Menunggu" },
+                selected = selectedFilter == R.string.filter_pending,
+                onClick = { selectedFilter = R.string.filter_pending },
                 label = { Text(stringResource(id = R.string.filter_pending)) }
             )
             FilterChip(
-                selected = selectedFilter == stringResource(id = R.string.status_cancelled),
-                onClick = { selectedFilter = "Dibatalkan" },
+                selected = selectedFilter == R.string.filter_cancelled,
+                onClick = { selectedFilter = R.string.filter_cancelled },
                 label = { Text(stringResource(id = R.string.filter_cancelled)) }
             )
         }
@@ -107,9 +101,9 @@ fun ReservationHistoryScreen(viewModel: AppViewModel = viewModel()) { // Perbaik
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 val filteredReservations = when (selectedFilter) {
-                    stringResource(id = R.string.filter_confirmed) -> reservations.filter { it.status == ReservationStatus.CONFIRMED }
-                    stringResource(id = R.string.filter_pending) -> reservations.filter { it.status == ReservationStatus.PENDING }
-                    stringResource(id = R.string.filter_cancelled) -> reservations.filter { it.status == ReservationStatus.CANCELLED }
+                    R.string.filter_confirmed -> reservations.filter { it.status == ReservationStatus.CONFIRMED }
+                    R.string.filter_pending -> reservations.filter { it.status == ReservationStatus.PENDING }
+                    R.string.filter_cancelled -> reservations.filter { it.status == ReservationStatus.CANCELLED }
                     else -> reservations
                 }
                 items(filteredReservations) { reservation ->
@@ -186,16 +180,5 @@ fun ReservationItemCard(reservation: Reservation) {
                 Text(text = stringResource(id = R.string.detail_button))
             }
         }
-    }
-}
-
-private fun formatDate(dateString: String): String {
-    return try {
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val outputFormat = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
-        val date = inputFormat.parse(dateString)
-        outputFormat.format(date ?: return dateString)
-    } catch (e: Exception) {
-        dateString
     }
 }

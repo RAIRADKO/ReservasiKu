@@ -10,9 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Logout
-import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -28,16 +26,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.restaurant.reservation.R
-import com.restaurant.reservation.model.User
 import com.restaurant.reservation.ui.theme.DangerRed
 import com.restaurant.reservation.ui.theme.PrimaryBlue
-import com.restaurant.reservation.ui.theme.RestaurantReservationTheme
 import com.restaurant.reservation.viewmodel.AppViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel // Perbaikan: Tambahkan import viewModel()
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: Gunakan viewModel() untuk membuat instance
+fun ProfileScreen(viewModel: AppViewModel = viewModel()) {
     val user by viewModel.user.collectAsState()
 
     Column(
@@ -111,13 +107,29 @@ fun ProfileScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: Gunakan
 
         // Menu Items
         Spacer(modifier = Modifier.height(24.dp))
-        ProfileMenuItem(icon = Icons.Default.Person, title = stringResource(id = R.string.edit_profile))
+        ProfileMenuItem(
+            icon = Icons.Default.Person,
+            title = stringResource(id = R.string.edit_profile),
+            onClick = { /* TODO: Implement navigation to Edit Profile screen */ }
+        )
         Spacer(modifier = Modifier.height(8.dp))
-        ProfileMenuItem(icon = Icons.Default.Lock, title = stringResource(id = R.string.change_password))
+        ProfileMenuItem(
+            icon = Icons.Default.Lock,
+            title = stringResource(id = R.string.change_password),
+            onClick = { /* TODO: Implement navigation to Change Password screen */ }
+        )
         Spacer(modifier = Modifier.height(8.dp))
-        ProfileMenuItem(icon = Icons.Default.Settings, title = stringResource(id = R.string.settings))
+        ProfileMenuItem(
+            icon = Icons.Default.Settings,
+            title = stringResource(id = R.string.settings),
+            onClick = { /* TODO: Implement navigation to Settings screen */ }
+        )
         Spacer(modifier = Modifier.height(8.dp))
-        ProfileMenuItem(icon = Icons.Default.Info, title = stringResource(id = R.string.about))
+        ProfileMenuItem(
+            icon = Icons.Default.Info,
+            title = stringResource(id = R.string.about),
+            onClick = { /* TODO: Implement navigation to About screen */ }
+        )
 
         // Logout Button
         Spacer(modifier = Modifier.height(24.dp))
@@ -139,9 +151,11 @@ fun ProfileScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: Gunakan
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileMenuItem(icon: ImageVector, title: String) {
+fun ProfileMenuItem(icon: ImageVector, title: String, onClick: () -> Unit) {
     Card(
+        onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         shape = RoundedCornerShape(12.dp),

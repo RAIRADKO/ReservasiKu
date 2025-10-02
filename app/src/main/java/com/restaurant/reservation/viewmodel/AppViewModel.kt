@@ -6,6 +6,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import com.restaurant.reservation.model.*
 
@@ -35,6 +36,18 @@ class AppViewModel : ViewModel() {
     private val _hasSeenOnboarding = MutableStateFlow(false)
     val hasSeenOnboarding: StateFlow<Boolean> = _hasSeenOnboarding.asStateFlow()
 
+    val unreadNotificationCount: StateFlow<Int> = _notifications.map { list ->
+        list.count { !it.isRead }
+    }.asStateFlow()
+
+    val totalReservations: StateFlow<Int> = _reservationHistory.map { it.size }.asStateFlow()
+    val thisMonthReservations: StateFlow<Int> = _reservationHistory.map { reservations ->
+        reservations.count {
+            // Placeholder logic to count reservations for the current month
+            it.date.startsWith("2024-12") // This should be replaced with real date logic
+        }
+    }.asStateFlow()
+
     init {
         // Simulate checking shared preferences for onboarding status
         checkOnboardingStatus()
@@ -61,6 +74,12 @@ class AppViewModel : ViewModel() {
                 message = "Jangan lupa reservasi Anda hari ini pukul 19:00 di meja 4.",
                 timestamp = "1 hari yang lalu",
                 isRead = true
+            ),
+            NotificationItem(
+                id = "3",
+                title = "Diskon Akhir Pekan",
+                message = "Dapatkan diskon 15% untuk semua reservasi akhir pekan!",
+                timestamp = "3 hari yang lalu",
             )
         )
 

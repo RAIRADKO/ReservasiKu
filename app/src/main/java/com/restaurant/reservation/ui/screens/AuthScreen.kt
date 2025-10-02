@@ -11,25 +11,27 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.restaurant.reservation.R
 import com.restaurant.reservation.model.User
 import com.restaurant.reservation.ui.theme.PrimaryBlue
-import com.restaurant.reservation.ui.theme.RestaurantReservationTheme
 import com.restaurant.reservation.viewmodel.AppViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel // Perbaikan: Tambahkan import untuk viewModel()
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun AuthScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: Gunakan viewModel() untuk membuat instance
+fun AuthScreen(viewModel: AppViewModel = viewModel()) {
     var isLogin by remember { mutableStateOf(true) }
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
-    var phoneNumber by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+
+    val isFormValid = if (isLogin) {
+        email.isNotBlank() && password.isNotBlank()
+    } else {
+        name.isNotBlank() && email.isNotBlank() && password.isNotBlank() && password == confirmPassword
+    }
 
     Column(
         modifier = Modifier
@@ -61,14 +63,6 @@ fun AuthScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: Gunakan vi
                 value = name,
                 onValueChange = { name = it },
                 label = { Text(stringResource(id = R.string.name_hint)) },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            OutlinedTextField(
-                value = phoneNumber,
-                onValueChange = { phoneNumber = it },
-                label = { Text(stringResource(id = R.string.phone_hint)) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -108,10 +102,14 @@ fun AuthScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: Gunakan vi
 
         Button(
             onClick = {
-                // Handle login/register logic here
-                viewModel.handleLogin(User(name, email))
+                if (isLogin) {
+                    viewModel.handleLogin(User(name = "User", email = email))
+                } else {
+                    viewModel.handleLogin(User(name = name, email = email))
+                }
             },
             modifier = Modifier.fillMaxWidth(),
+            enabled = isFormValid,
             colors = ButtonDefaults.buttonColors(containerColor = PrimaryBlue)
         ) {
             Text(
@@ -128,18 +126,5 @@ fun AuthScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: Gunakan vi
                 color = PrimaryBlue
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun AuthScreenPreview() {
-    RestaurantReservationTheme {
-        AuthScreen(viewModel = object : AppViewModel() {
-            // Implementasi mock atau kosong untuk fungsi yang diperlukan
-            override fun handleLogin(user: User) {
-                // Do nothing for preview
-            }
-        })
     }
 }

@@ -1,5 +1,7 @@
 package com.restaurant.reservation.ui.screens
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -17,6 +19,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -25,19 +28,18 @@ import com.restaurant.reservation.R
 import com.restaurant.reservation.model.Table
 import com.restaurant.reservation.model.TableSelectionData
 import com.restaurant.reservation.ui.theme.PrimaryBlue
-import com.restaurant.reservation.ui.theme.TextDisabled
 import com.restaurant.reservation.viewmodel.AppViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import java.util.*
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
-import androidx.lifecycle.viewmodel.compose.viewModel // Perbaikan: Tambahkan import viewModel()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TableSelectionScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: Gunakan viewModel() untuk membuat instance
+fun TableSelectionScreen(viewModel: AppViewModel = viewModel()) {
     var step by remember { mutableStateOf(1) }
-    var selectedDate by remember { mutableStateOf("2024-10-27") } // Placeholder
-    var selectedTime by remember { mutableStateOf("19:00") } // Placeholder
+    var selectedDate by remember { mutableStateOf("") }
+    var selectedTime by remember { mutableStateOf("") }
     var peopleCount by remember { mutableStateOf(2) }
     var selectedTable by remember { mutableStateOf<Int?>(null) }
     val tables = listOf(
@@ -59,6 +61,29 @@ fun TableSelectionScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: 
         4 -> selectedTable != null
         else -> false
     }
+    val context = LocalContext.current
+    val calendar = Calendar.getInstance()
+
+    val datePickerDialog = DatePickerDialog(
+        context,
+        { _, year, month, dayOfMonth ->
+            val date = GregorianCalendar(year, month, dayOfMonth).time
+            selectedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date)
+        },
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH)
+    )
+
+    val timePickerDialog = TimePickerDialog(
+        context,
+        { _, hourOfDay, minute ->
+            selectedTime = String.format("%02d:%02d", hourOfDay, minute)
+        },
+        calendar.get(Calendar.HOUR_OF_DAY),
+        calendar.get(Calendar.MINUTE),
+        true // is24HourView
+    )
 
     Scaffold(
         topBar = {
@@ -100,8 +125,7 @@ fun TableSelectionScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: 
                                 style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Medium)
                             )
                             Spacer(modifier = Modifier.height(16.dp))
-                            // Placeholder for Date Picker
-                            OutlinedButton(onClick = { /* TODO: Open Date Picker */ }, modifier = Modifier.fillMaxWidth()) {
+                            OutlinedButton(onClick = { datePickerDialog.show() }, modifier = Modifier.fillMaxWidth()) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Icon(Icons.Default.CalendarMonth, contentDescription = null)
                                     Spacer(Modifier.width(8.dp))
@@ -115,8 +139,7 @@ fun TableSelectionScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: 
                                 style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Medium)
                             )
                             Spacer(modifier = Modifier.height(16.dp))
-                            // Placeholder for Time Picker
-                            OutlinedButton(onClick = { /* TODO: Open Time Picker */ }, modifier = Modifier.fillMaxWidth()) {
+                            OutlinedButton(onClick = { timePickerDialog.show() }, modifier = Modifier.fillMaxWidth()) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Icon(Icons.Default.Schedule, contentDescription = null)
                                     Spacer(Modifier.width(8.dp))
@@ -130,7 +153,6 @@ fun TableSelectionScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: 
                                 style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Medium)
                             )
                             Spacer(modifier = Modifier.height(16.dp))
-                            // Placeholder for People Count selection
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
@@ -167,9 +189,7 @@ fun TableSelectionScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: 
                                         isClickable = isClickable,
                                         isOccupied = table.status == "occupied",
                                         onClick = {
-                                            if (isClickable) {
-                                                selectedTable = table.id
-                                            }
+                                            selectedTable = if (selectedTable == table.id) null else table.id
                                         }
                                     )
                                 }
@@ -226,6 +246,7 @@ fun TableCard(id: Int, seats: Int, isSelected: Boolean, isClickable: Boolean, is
 
     Card(
         onClick = onClick,
+        enabled = isClickable,
         modifier = Modifier.width(120.dp),
         colors = CardDefaults.cardColors(
             containerColor = containerColor
