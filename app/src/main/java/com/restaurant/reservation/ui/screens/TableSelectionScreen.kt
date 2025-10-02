@@ -15,11 +15,17 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.flowlayout.FlowRow
+import com.restaurant.reservation.R
+import com.restaurant.reservation.model.Table
 import com.restaurant.reservation.model.TableSelectionData
 import com.restaurant.reservation.ui.theme.PrimaryBlue
 import com.restaurant.reservation.ui.theme.RestaurantReservationTheme
+import com.restaurant.reservation.ui.theme.TextDisabled
 import com.restaurant.reservation.viewmodel.AppViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -34,9 +40,16 @@ fun TableSelectionScreen(viewModel: AppViewModel) {
     var peopleCount by remember { mutableStateOf(2) }
     var selectedTable by remember { mutableStateOf<Int?>(null) }
     val tables = listOf(
-        1 to 2, 2 to 4, 3 to 2, 4 to 6, 5 to 4, 6 to 8, 7 to 2, 8 to 4
+        Table(1, 2, "available"),
+        Table(2, 4, "available"),
+        Table(3, 2, "occupied"),
+        Table(4, 6, "available"),
+        Table(5, 4, "available"),
+        Table(6, 8, "occupied"),
+        Table(7, 2, "available"),
+        Table(8, 4, "available")
     )
-    val availableTables = tables.filter { it.second >= peopleCount }
+    val availableTables = tables.filter { it.capacity >= peopleCount }
 
     val canContinue = when (step) {
         1 -> selectedDate.isNotBlank()
@@ -49,12 +62,12 @@ fun TableSelectionScreen(viewModel: AppViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Buat Reservasi Baru") },
+                title = { Text(stringResource(id = R.string.new_reservation)) },
                 navigationIcon = {
                     IconButton(onClick = {
                         if (step > 1) step-- else viewModel.navigateBack()
                     }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Kembali")
+                        Icon(Icons.Filled.ArrowBack, contentDescription = stringResource(id = R.string.back_button))
                     }
                 }
             )
@@ -82,7 +95,7 @@ fun TableSelectionScreen(viewModel: AppViewModel) {
                     when (step) {
                         1 -> {
                             Text(
-                                text = "Pilih Tanggal",
+                                text = stringResource(id = R.string.select_date),
                                 style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Medium)
                             )
                             Spacer(modifier = Modifier.height(16.dp))
@@ -91,13 +104,13 @@ fun TableSelectionScreen(viewModel: AppViewModel) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Icon(Icons.Default.CalendarMonth, contentDescription = null)
                                     Spacer(Modifier.width(8.dp))
-                                    Text(selectedDate.ifBlank { "Pilih tanggal" })
+                                    Text(selectedDate.ifBlank { stringResource(id = R.string.select_date) })
                                 }
                             }
                         }
                         2 -> {
                             Text(
-                                text = "Pilih Jam",
+                                text = stringResource(id = R.string.select_time),
                                 style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Medium)
                             )
                             Spacer(modifier = Modifier.height(16.dp))
@@ -106,13 +119,13 @@ fun TableSelectionScreen(viewModel: AppViewModel) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Icon(Icons.Default.Schedule, contentDescription = null)
                                     Spacer(Modifier.width(8.dp))
-                                    Text(selectedTime.ifBlank { "Pilih jam" })
+                                    Text(selectedTime.ifBlank { stringResource(id = R.string.select_time) })
                                 }
                             }
                         }
                         3 -> {
                             Text(
-                                text = "Jumlah Orang",
+                                text = stringResource(id = R.string.select_people),
                                 style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Medium)
                             )
                             Spacer(modifier = Modifier.height(16.dp))
@@ -126,7 +139,7 @@ fun TableSelectionScreen(viewModel: AppViewModel) {
                                     Icon(Icons.Default.ArrowBack, contentDescription = "Kurangi")
                                 }
                                 Text(
-                                    text = "$peopleCount orang",
+                                    text = "$peopleCount ${stringResource(id = R.string.people_count_suffix)}",
                                     style = MaterialTheme.typography.displaySmall,
                                     modifier = Modifier.padding(horizontal = 16.dp)
                                 )
@@ -137,17 +150,26 @@ fun TableSelectionScreen(viewModel: AppViewModel) {
                         }
                         4 -> {
                             Text(
-                                text = "Pilih Meja",
+                                text = stringResource(id = R.string.select_table),
                                 style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Medium)
                             )
                             Spacer(modifier = Modifier.height(16.dp))
                             FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                availableTables.forEach { (id, seats) ->
+                                tables.forEach { table ->
+                                    val isAvailable = table.status == "available"
+                                    val meetsCapacity = table.capacity >= peopleCount
+                                    val isClickable = isAvailable && meetsCapacity
                                     TableCard(
-                                        id = id,
-                                        seats = seats,
-                                        isSelected = selectedTable == id,
-                                        onClick = { selectedTable = id }
+                                        id = table.id,
+                                        seats = table.capacity,
+                                        isSelected = selectedTable == table.id,
+                                        isClickable = isClickable,
+                                        isOccupied = table.status == "occupied",
+                                        onClick = {
+                                            if (isClickable) {
+                                                selectedTable = table.id
+                                            }
+                                        }
                                     )
                                 }
                             }
@@ -176,7 +198,7 @@ fun TableSelectionScreen(viewModel: AppViewModel) {
                 enabled = canContinue,
                 colors = ButtonDefaults.buttonColors(containerColor = PrimaryBlue)
             ) {
-                Text(text = if (step < 4) "Selanjutnya" else "Lanjutkan")
+                Text(text = if (step < 4) stringResource(id = R.string.continue_button) else stringResource(id = R.string.continue_reservation_button))
                 Spacer(modifier = Modifier.width(8.dp))
                 Icon(imageVector = Icons.Default.ArrowForward, contentDescription = null)
             }
@@ -186,13 +208,28 @@ fun TableSelectionScreen(viewModel: AppViewModel) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TableCard(id: Int, seats: Int, isSelected: Boolean, onClick: () -> Unit) {
+fun TableCard(id: Int, seats: Int, isSelected: Boolean, isClickable: Boolean, isOccupied: Boolean, onClick: () -> Unit) {
+    val containerColor = when {
+        isOccupied -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
+        isSelected -> PrimaryBlue
+        else -> MaterialTheme.colorScheme.surface
+    }
+
+    val contentColor = when {
+        isOccupied -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+        isSelected -> Color.White
+        else -> MaterialTheme.colorScheme.onSurface
+    }
+
+    val borderColor = if (isSelected) PrimaryBlue else MaterialTheme.colorScheme.outline
+
     Card(
         onClick = onClick,
         modifier = Modifier.width(120.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (isSelected) PrimaryBlue else MaterialTheme.colorScheme.surface
+            containerColor = containerColor
         ),
+        border = BorderStroke(1.dp, borderColor),
         shape = RoundedCornerShape(12.dp)
     ) {
         Column(
@@ -202,15 +239,23 @@ fun TableCard(id: Int, seats: Int, isSelected: Boolean, onClick: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Meja #$id",
+                text = "${stringResource(id = R.string.table_number)} #$id",
                 style = MaterialTheme.typography.titleMedium,
-                color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurface
+                color = contentColor
             )
             Text(
-                text = "$seats kursi",
+                text = "$seats ${stringResource(id = R.string.person_count_suffix)}",
                 style = MaterialTheme.typography.bodySmall,
-                color = if (isSelected) Color.White.copy(alpha = 0.8f) else MaterialTheme.colorScheme.onSurfaceVariant
+                color = contentColor.copy(alpha = if (isSelected) 0.8f else 0.6f)
             )
+            if (isOccupied) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = stringResource(id = R.string.table_occupied),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = contentColor
+                )
+            }
         }
     }
 }

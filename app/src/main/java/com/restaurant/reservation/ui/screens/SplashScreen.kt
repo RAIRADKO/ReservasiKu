@@ -63,7 +63,9 @@ fun SplashScreen(viewModel: AppViewModel) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_restaurant),
                     contentDescription = "Restaurant Logo",
-                    modifier = Modifier.size(64.dp)
+                    modifier = Modifier.size(64.dp),
+                    // Menggunakan PrimaryBlue sesuai spesifikasi
+                    colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(PrimaryBlue)
                 )
             }
 

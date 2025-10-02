@@ -17,10 +17,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.restaurant.reservation.R
 import com.restaurant.reservation.model.TableSelectionData
+import com.restaurant.reservation.ui.theme.DangerRed
 import com.restaurant.reservation.ui.theme.PrimaryBlue
 import com.restaurant.reservation.ui.theme.RestaurantReservationTheme
 import com.restaurant.reservation.viewmodel.AppViewModel
@@ -38,7 +41,7 @@ fun ReservationDetailsScreen(viewModel: AppViewModel) {
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text("Tidak ada detail reservasi.", color = MaterialTheme.colorScheme.onBackground)
+            Text(stringResource(id = R.string.no_reservation_details), color = MaterialTheme.colorScheme.onBackground)
         }
         return
     }
@@ -46,10 +49,10 @@ fun ReservationDetailsScreen(viewModel: AppViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Detail Reservasi") },
+                title = { Text(stringResource(id = R.string.reservation_details)) },
                 navigationIcon = {
                     IconButton(onClick = { viewModel.navigateBack() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Kembali")
+                        Icon(Icons.Filled.ArrowBack, contentDescription = stringResource(id = R.string.back_button))
                     }
                 }
             )
@@ -74,7 +77,7 @@ fun ReservationDetailsScreen(viewModel: AppViewModel) {
                     modifier = Modifier.padding(24.dp)
                 ) {
                     Text(
-                        text = "Pastikan detail reservasi Anda sudah benar",
+                        text = stringResource(id = R.string.confirm_reservation_details),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -83,26 +86,26 @@ fun ReservationDetailsScreen(viewModel: AppViewModel) {
 
                     ReservationDetailRow(
                         icon = Icons.Default.CalendarMonth,
-                        label = "Tanggal",
+                        label = stringResource(id = R.string.date),
                         value = formatDate(pendingReservation!!.date)
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     ReservationDetailRow(
                         icon = Icons.Default.Schedule,
-                        label = "Jam",
-                        value = "${pendingReservation!!.time} WIB"
+                        label = stringResource(id = R.string.time),
+                        value = "${pendingReservation!!.time} ${stringResource(id = R.string.time_zone)}"
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     ReservationDetailRow(
                         icon = Icons.Default.Groups,
-                        label = "Jumlah Orang",
-                        value = "${pendingReservation!!.people} orang"
+                        label = stringResource(id = R.string.guest_count_label),
+                        value = "${pendingReservation!!.people} ${stringResource(id = R.string.people_count_suffix)}"
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     ReservationDetailRow(
                         icon = Icons.Default.Place,
-                        label = "Nomor Meja",
-                        value = "Meja #${pendingReservation!!.table}"
+                        label = stringResource(id = R.string.table_number_label),
+                        value = "${stringResource(id = R.string.table)} #${pendingReservation!!.table}"
                     )
                 }
             }
@@ -114,14 +117,16 @@ fun ReservationDetailsScreen(viewModel: AppViewModel) {
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = PrimaryBlue)
             ) {
-                Text(text = "Konfirmasi Reservasi")
+                Text(text = stringResource(id = R.string.confirm_reservation))
             }
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedButton(
                 onClick = { viewModel.navigateBack() },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = DangerRed),
+                border = BorderStroke(1.dp, DangerRed)
             ) {
-                Text(text = "Ubah Detail", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(text = stringResource(id = R.string.cancel_reservation))
             }
         }
     }

@@ -9,14 +9,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.TableRestaurant
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.restaurant.reservation.R
 import com.restaurant.reservation.model.Reservation
 import com.restaurant.reservation.model.ReservationStatus
 import com.restaurant.reservation.ui.theme.DangerRed
@@ -31,7 +34,7 @@ import java.util.Locale
 @Composable
 fun ReservationHistoryScreen(viewModel: AppViewModel) {
     val reservations by viewModel.reservationHistory.collectAsState()
-    var selectedFilter by remember { mutableStateOf("Semua") }
+    var selectedFilter by remember { mutableStateOf(stringResource(id = R.string.filter_all)) }
 
     Column(
         modifier = Modifier
@@ -46,14 +49,14 @@ fun ReservationHistoryScreen(viewModel: AppViewModel) {
                 .padding(16.dp)
         ) {
             Text(
-                text = "Riwayat Reservasi",
+                text = stringResource(id = R.string.reservation_history),
                 style = MaterialTheme.typography.headlineLarge.copy(
                     fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
             )
             Text(
-                text = "Lihat semua reservasi Anda",
+                text = stringResource(id = R.string.reservation_history_subtitle),
                 style = MaterialTheme.typography.bodyMedium.copy(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -69,31 +72,32 @@ fun ReservationHistoryScreen(viewModel: AppViewModel) {
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             FilterChip(
-                selected = selectedFilter == "Semua",
+                selected = selectedFilter == stringResource(id = R.string.filter_all),
                 onClick = { selectedFilter = "Semua" },
-                label = { Text("Semua") }
+                label = { Text(stringResource(id = R.string.filter_all)) }
             )
             FilterChip(
-                selected = selectedFilter == "Dikonfirmasi",
+                selected = selectedFilter == stringResource(id = R.string.status_confirmed),
                 onClick = { selectedFilter = "Dikonfirmasi" },
-                label = { Text("Dikonfirmasi") }
+                label = { Text(stringResource(id = R.string.filter_confirmed)) }
             )
             FilterChip(
-                selected = selectedFilter == "Menunggu",
+                selected = selectedFilter == stringResource(id = R.string.status_pending),
                 onClick = { selectedFilter = "Menunggu" },
-                label = { Text("Menunggu") }
+                label = { Text(stringResource(id = R.string.filter_pending)) }
             )
             FilterChip(
-                selected = selectedFilter == "Dibatalkan",
+                selected = selectedFilter == stringResource(id = R.string.status_cancelled),
                 onClick = { selectedFilter = "Dibatalkan" },
-                label = { Text("Dibatalkan") }
+                label = { Text(stringResource(id = R.string.filter_cancelled)) }
             )
         }
 
         if (reservations.isEmpty()) {
             EmptyState(
-                text = "Belum ada riwayat",
-                subText = "Anda belum memiliki reservasi apapun. Mulai pesan meja sekarang!"
+                text = stringResource(id = R.string.no_reservation_history),
+                subText = stringResource(id = R.string.no_reservation_history_subtitle),
+                icon = Icons.Default.History
             )
         } else {
             LazyColumn(
@@ -102,9 +106,9 @@ fun ReservationHistoryScreen(viewModel: AppViewModel) {
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 val filteredReservations = when (selectedFilter) {
-                    "Dikonfirmasi" -> reservations.filter { it.status == ReservationStatus.CONFIRMED }
-                    "Menunggu" -> reservations.filter { it.status == ReservationStatus.PENDING }
-                    "Dibatalkan" -> reservations.filter { it.status == ReservationStatus.CANCELLED }
+                    stringResource(id = R.string.filter_confirmed) -> reservations.filter { it.status == ReservationStatus.CONFIRMED }
+                    stringResource(id = R.string.filter_pending) -> reservations.filter { it.status == ReservationStatus.PENDING }
+                    stringResource(id = R.string.filter_cancelled) -> reservations.filter { it.status == ReservationStatus.CANCELLED }
                     else -> reservations
                 }
                 items(filteredReservations) { reservation ->
@@ -124,9 +128,9 @@ fun ReservationItemCard(reservation: Reservation) {
     }
 
     val statusText = when (reservation.status) {
-        ReservationStatus.CONFIRMED -> "Dikonfirmasi"
-        ReservationStatus.PENDING -> "Menunggu"
-        ReservationStatus.CANCELLED -> "Dibatalkan"
+        ReservationStatus.CONFIRMED -> stringResource(id = R.string.status_confirmed)
+        ReservationStatus.PENDING -> stringResource(id = R.string.status_pending)
+        ReservationStatus.CANCELLED -> stringResource(id = R.string.status_cancelled)
     }
 
     Card(
@@ -144,7 +148,7 @@ fun ReservationItemCard(reservation: Reservation) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Meja #${reservation.table}",
+                    text = "${stringResource(id = R.string.table)} #${reservation.table}",
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium)
                 )
                 Text(
@@ -166,11 +170,19 @@ fun ReservationItemCard(reservation: Reservation) {
                     )
                 )
                 Text(
-                    text = "${reservation.people} orang",
+                    text = "${reservation.people} ${stringResource(id = R.string.people_count_suffix)}",
                     style = MaterialTheme.typography.bodySmall.copy(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = { /* TODO: Navigate to detail screen */ },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = PrimaryBlue)
+            ) {
+                Text(text = stringResource(id = R.string.detail_button))
             }
         }
     }
@@ -184,13 +196,5 @@ private fun formatDate(dateString: String): String {
         outputFormat.format(date ?: return dateString)
     } catch (e: Exception) {
         dateString
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ReservationHistoryScreenPreview() {
-    RestaurantReservationTheme {
-        ReservationHistoryScreen(viewModel = AppViewModel())
     }
 }

@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Mail
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
@@ -22,14 +23,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.restaurant.reservation.R
 import com.restaurant.reservation.model.User
+import com.restaurant.reservation.ui.theme.DangerRed
 import com.restaurant.reservation.ui.theme.PrimaryBlue
 import com.restaurant.reservation.ui.theme.RestaurantReservationTheme
 import com.restaurant.reservation.viewmodel.AppViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(viewModel: AppViewModel) {
     val user by viewModel.user.collectAsState()
@@ -43,7 +48,7 @@ fun ProfileScreen(viewModel: AppViewModel) {
     ) {
         // Header
         Text(
-            text = "Profil",
+            text = stringResource(id = R.string.profile_title),
             style = MaterialTheme.typography.headlineLarge.copy(
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground
@@ -51,7 +56,7 @@ fun ProfileScreen(viewModel: AppViewModel) {
             modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
         )
         Text(
-            text = "Kelola akun dan pengaturan Anda",
+            text = stringResource(id = R.string.profile_subtitle),
             style = MaterialTheme.typography.bodyLarge.copy(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             ),
@@ -88,14 +93,14 @@ fun ProfileScreen(viewModel: AppViewModel) {
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = user?.name ?: "Pengguna",
+                    text = user?.name ?: stringResource(id = R.string.guest),
                     style = MaterialTheme.typography.headlineMedium.copy(
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onBackground
                     )
                 )
                 Text(
-                    text = user?.email ?: "email@example.com",
+                    text = user?.email ?: stringResource(id = R.string.email_placeholder),
                     style = MaterialTheme.typography.bodyMedium.copy(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -105,27 +110,29 @@ fun ProfileScreen(viewModel: AppViewModel) {
 
         // Menu Items
         Spacer(modifier = Modifier.height(24.dp))
-        ProfileMenuItem(icon = Icons.Default.Lock, title = "Ganti Password")
+        ProfileMenuItem(icon = Icons.Default.Person, title = stringResource(id = R.string.edit_profile))
         Spacer(modifier = Modifier.height(8.dp))
-        ProfileMenuItem(icon = Icons.Default.Settings, title = "Pengaturan")
+        ProfileMenuItem(icon = Icons.Default.Lock, title = stringResource(id = R.string.change_password))
         Spacer(modifier = Modifier.height(8.dp))
-        ProfileMenuItem(icon = Icons.Default.Info, title = "Tentang Aplikasi")
+        ProfileMenuItem(icon = Icons.Default.Settings, title = stringResource(id = R.string.settings))
+        Spacer(modifier = Modifier.height(8.dp))
+        ProfileMenuItem(icon = Icons.Default.Info, title = stringResource(id = R.string.about))
 
         // Logout Button
         Spacer(modifier = Modifier.height(24.dp))
         Button(
             onClick = { viewModel.handleLogout() },
             modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+            colors = ButtonDefaults.buttonColors(containerColor = DangerRed)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     imageVector = Icons.Default.Logout,
-                    contentDescription = "Logout",
+                    contentDescription = stringResource(id = R.string.logout),
                     modifier = Modifier.size(24.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "Keluar", fontSize = 16.sp)
+                Text(text = stringResource(id = R.string.logout), fontSize = 16.sp)
             }
         }
     }
@@ -157,13 +164,5 @@ fun ProfileMenuItem(icon: ImageVector, title: String) {
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium)
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ProfileScreenPreview() {
-    RestaurantReservationTheme {
-        ProfileScreen(viewModel = AppViewModel())
     }
 }

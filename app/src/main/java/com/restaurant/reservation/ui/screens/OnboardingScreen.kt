@@ -16,35 +16,37 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.restaurant.reservation.R
 import com.restaurant.reservation.ui.theme.PrimaryBlue
-import com.restaurant.reservation.ui.theme.RestaurantReservationTheme
 import com.restaurant.reservation.viewmodel.AppViewModel
 import kotlinx.coroutines.launch
 
 data class OnboardingSlide(
     val icon: ImageVector,
-    val title: String,
-    val description: String
+    val titleRes: Int,
+    val descriptionRes: Int
 )
 
 private val slides = listOf(
     OnboardingSlide(
         icon = Icons.Default.CalendarMonth,
-        title = "Pesan meja kapan saja",
-        description = "Reservasi meja restoran favorit Anda dengan mudah, 24/7"
+        titleRes = R.string.onboarding_title_1,
+        descriptionRes = R.string.onboarding_desc_1
     ),
     OnboardingSlide(
         icon = Icons.Default.Fastfood,
-        title = "Nikmati pengalaman makan tanpa antre",
-        description = "Datang langsung ke meja yang sudah disiapkan untuk Anda"
+        titleRes = R.string.onboarding_title_2,
+        descriptionRes = R.string.onboarding_desc_2
     ),
     OnboardingSlide(
         icon = Icons.Default.Smartphone,
-        title = "Mudah, cepat, nyaman",
-        description = "Semua dalam genggaman Anda dengan aplikasi yang user-friendly"
+        titleRes = R.string.onboarding_title_3,
+        descriptionRes = R.string.onboarding_desc_3
     )
 )
 
@@ -65,7 +67,7 @@ fun OnboardingScreen(viewModel: AppViewModel) {
             onClick = { viewModel.handleOnboardingSkip() },
             modifier = Modifier.align(Alignment.End)
         ) {
-            Text("Lewati", color = PrimaryBlue)
+            Text(stringResource(id = R.string.onboarding_skip), color = PrimaryBlue)
         }
 
         HorizontalPager(
@@ -109,7 +111,7 @@ fun OnboardingScreen(viewModel: AppViewModel) {
             colors = ButtonDefaults.buttonColors(containerColor = PrimaryBlue)
         ) {
             Text(
-                text = if (pagerState.currentPage == slides.size - 1) "Mulai" else "Selanjutnya",
+                text = if (pagerState.currentPage == slides.size - 1) stringResource(id = R.string.onboarding_start) else stringResource(id = R.string.onboarding_next),
                 fontSize = 16.sp
             )
         }
@@ -125,13 +127,13 @@ fun OnboardingSlideItem(slide: OnboardingSlide) {
     ) {
         Icon(
             imageVector = slide.icon,
-            contentDescription = slide.title,
+            contentDescription = stringResource(id = slide.titleRes),
             modifier = Modifier.size(120.dp),
             tint = PrimaryBlue
         )
         Spacer(modifier = Modifier.height(32.dp))
         Text(
-            text = slide.title,
+            text = stringResource(id = slide.titleRes),
             style = MaterialTheme.typography.headlineLarge.copy(
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground
@@ -140,7 +142,7 @@ fun OnboardingSlideItem(slide: OnboardingSlide) {
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = slide.description,
+            text = stringResource(id = slide.descriptionRes),
             style = MaterialTheme.typography.bodyLarge.copy(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             ),

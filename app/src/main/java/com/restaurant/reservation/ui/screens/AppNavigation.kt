@@ -1,7 +1,6 @@
 package com.restaurant.reservation.ui.screens
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
@@ -21,7 +20,6 @@ import com.restaurant.reservation.model.User
 import com.restaurant.reservation.ui.components.BottomNavigationBar
 import com.restaurant.reservation.viewmodel.AppViewModel
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AppNavigation(
     appState: AppState,

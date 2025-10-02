@@ -1,5 +1,6 @@
 package com.restaurant.reservation.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,6 +22,8 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.TableRestaurant
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
@@ -34,9 +37,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.restaurant.reservation.R
 import com.restaurant.reservation.model.Reservation
 import com.restaurant.reservation.model.ReservationStatus
 import com.restaurant.reservation.ui.theme.DangerRed
@@ -62,13 +69,13 @@ fun HomeScreen(viewModel: AppViewModel) {
         ) {
             // Header
             Text(
-                text = "Selamat datang,",
+                text = stringResource(id = R.string.welcome),
                 style = MaterialTheme.typography.bodyLarge.copy(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             )
             Text(
-                text = user?.name ?: "Pengguna",
+                text = user?.name ?: stringResource(id = R.string.guest),
                 style = MaterialTheme.typography.headlineMedium.copy(
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onBackground
@@ -77,15 +84,20 @@ fun HomeScreen(viewModel: AppViewModel) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Active Reservation Card
+            // Active Reservation Card or Empty State
             if (activeReservation != null) {
-                ActiveReservationCard(reservation = activeReservation)
-                Spacer(modifier = Modifier.height(24.dp))
+                ActiveReservationCard(reservation = activeReservation!!)
+            } else {
+                EmptyReservationState {
+                    viewModel.navigateToTableSelection()
+                }
             }
+
+            Spacer(modifier = Modifier.height(24.dp))
 
             // Quick Stats
             Text(
-                text = "Statistik Cepat",
+                text = stringResource(id = R.string.quick_stats),
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onBackground
@@ -98,14 +110,14 @@ fun HomeScreen(viewModel: AppViewModel) {
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 StatCard(
-                    title = "Total Reservasi",
+                    title = stringResource(id = R.string.total_reservations),
                     value = "12",
                     icon = Icons.Default.TableRestaurant,
                     color = PrimaryBlue,
                     modifier = Modifier.weight(1f)
                 )
                 StatCard(
-                    title = "Bulan Ini",
+                    title = stringResource(id = R.string.this_month),
                     value = "3",
                     icon = Icons.Default.Schedule,
                     color = SuccessGreen,
@@ -127,7 +139,7 @@ fun HomeScreen(viewModel: AppViewModel) {
         ) {
             Icon(
                 imageVector = Icons.Default.Add,
-                contentDescription = "Buat Reservasi Baru"
+                contentDescription = stringResource(id = R.string.new_reservation)
             )
         }
     }
@@ -142,9 +154,9 @@ fun ActiveReservationCard(reservation: Reservation) {
     }
 
     val statusText = when (reservation.status) {
-        ReservationStatus.CONFIRMED -> "Dikonfirmasi"
-        ReservationStatus.PENDING -> "Menunggu"
-        ReservationStatus.CANCELLED -> "Dibatalkan"
+        ReservationStatus.CONFIRMED -> stringResource(id = R.string.status_confirmed)
+        ReservationStatus.PENDING -> stringResource(id = R.string.status_pending)
+        ReservationStatus.CANCELLED -> stringResource(id = R.string.status_cancelled)
     }
 
     Card(
@@ -164,7 +176,7 @@ fun ActiveReservationCard(reservation: Reservation) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Reservasi Aktif",
+                    text = stringResource(id = R.string.active_reservation),
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Medium
                     )
@@ -198,7 +210,7 @@ fun ActiveReservationCard(reservation: Reservation) {
             ) {
                 ReservationDetailItem(
                     icon = Icons.Default.Schedule,
-                    label = "Tanggal & Waktu",
+                    label = stringResource(id = R.string.date_time),
                     value = "${formatDate(reservation.date)} • ${reservation.time}"
                 )
             }
@@ -211,16 +223,63 @@ fun ActiveReservationCard(reservation: Reservation) {
             ) {
                 ReservationDetailItem(
                     icon = Icons.Default.TableRestaurant,
-                    label = "Meja",
-                    value = "Meja ${reservation.table}",
+                    label = stringResource(id = R.string.table_number),
+                    value = "${stringResource(id = R.string.table)} ${reservation.table}",
                     modifier = Modifier.weight(1f)
                 )
                 ReservationDetailItem(
                     icon = Icons.Default.Person,
-                    label = "Tamu",
-                    value = "${reservation.people} orang",
+                    label = stringResource(id = R.string.guest_count),
+                    value = "${reservation.people} ${stringResource(id = R.string.people_count_suffix)}",
                     modifier = Modifier.weight(1f)
                 )
+            }
+        }
+    }
+}
+
+@Composable
+fun EmptyReservationState(onButtonClick: () -> Unit) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_restaurant_illustration),
+                contentDescription = null,
+                modifier = Modifier.size(100.dp),
+                alpha = 0.5f
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = stringResource(id = R.string.no_active_reservations),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = stringResource(id = R.string.no_active_reservations_desc),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = onButtonClick,
+                colors = ButtonDefaults.buttonColors(containerColor = PrimaryBlue)
+            ) {
+                Text(text = stringResource(id = R.string.new_reservation))
             }
         }
     }

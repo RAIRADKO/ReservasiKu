@@ -18,6 +18,13 @@ data class Reservation(
     val status: ReservationStatus
 )
 
+@Serializable
+data class Table(
+    val id: Int,
+    val capacity: Int,
+    val status: String // "available", "occupied"
+)
+
 enum class ReservationStatus {
     PENDING,
     CONFIRMED,

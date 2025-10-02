@@ -13,11 +13,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.restaurant.reservation.R
 import com.restaurant.reservation.model.NotificationItem
+import com.restaurant.reservation.ui.theme.PrimaryBlue
 import com.restaurant.reservation.ui.theme.RestaurantReservationTheme
 import com.restaurant.reservation.viewmodel.AppViewModel
 
@@ -40,14 +46,14 @@ fun NotificationsScreen(viewModel: AppViewModel) {
                 .padding(16.dp)
         ) {
             Text(
-                text = "Notifikasi",
+                text = stringResource(id = R.string.notifications_title),
                 style = MaterialTheme.typography.headlineLarge.copy(
                     fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
             )
             Text(
-                text = if (unreadCount > 0) "$unreadCount notifikasi belum dibaca" else "Semua notifikasi sudah dibaca",
+                text = if (unreadCount > 0) stringResource(id = R.string.unread_notifications, unreadCount) else stringResource(id = R.string.all_notifications_read),
                 style = MaterialTheme.typography.bodyMedium.copy(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -56,8 +62,9 @@ fun NotificationsScreen(viewModel: AppViewModel) {
 
         if (notifications.isEmpty()) {
             EmptyState(
-                text = "Belum ada notifikasi",
-                subText = "Notifikasi akan muncul di sini ketika ada update tentang reservasi Anda"
+                text = stringResource(id = R.string.no_notifications),
+                subText = stringResource(id = R.string.no_notifications_subtitle),
+                icon = Icons.Default.Notifications
             )
         } else {
             LazyColumn(
@@ -121,14 +128,14 @@ fun NotificationItemCard(notification: NotificationItem, onClick: () -> Unit) {
 }
 
 @Composable
-fun EmptyState(text: String, subText: String) {
+fun EmptyState(text: String, subText: String, icon: ImageVector) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Icon(
-            imageVector = Icons.Default.Notifications,
+            imageVector = icon,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(64.dp)
@@ -147,13 +154,5 @@ fun EmptyState(text: String, subText: String) {
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(horizontal = 32.dp)
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun NotificationsScreenPreview() {
-    RestaurantReservationTheme {
-        NotificationsScreen(viewModel = AppViewModel())
     }
 }
