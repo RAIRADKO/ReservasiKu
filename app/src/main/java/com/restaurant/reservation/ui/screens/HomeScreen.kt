@@ -224,7 +224,7 @@ fun ActiveReservationCard(reservation: Reservation) {
                 ReservationDetailItem(
                     icon = Icons.Default.TableRestaurant,
                     label = stringResource(id = R.string.table_number),
-                    value = "${stringResource(id = R.string.table)} ${reservation.table}",
+                    value = "${stringResource(id = R.string.table)} ${reservation.tableId}",
                     modifier = Modifier.weight(1f)
                 )
                 ReservationDetailItem(
@@ -254,12 +254,13 @@ fun EmptyReservationState(onButtonClick: () -> Unit) {
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_restaurant_illustration),
-                contentDescription = null,
-                modifier = Modifier.size(100.dp),
-                alpha = 0.5f
-            )
+            // Unresolved reference: `ic_restaurant_illustration` is not found, so this line is commented out.
+            // Image(
+            //     painter = painterResource(id = R.drawable.ic_restaurant_illustration),
+            //     contentDescription = null,
+            //     modifier = Modifier.size(100.dp),
+            //     alpha = 0.5f
+            // )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = stringResource(id = R.string.no_active_reservations),

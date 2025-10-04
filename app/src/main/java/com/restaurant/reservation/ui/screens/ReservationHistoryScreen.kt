@@ -143,7 +143,7 @@ fun ReservationItemCard(reservation: Reservation) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "${stringResource(id = R.string.table)} #${reservation.table}",
+                    text = "${stringResource(id = R.string.table)} #${reservation.tableId}",
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium)
                 )
                 Text(

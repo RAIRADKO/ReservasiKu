@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "19062788371",
+    "project_id": "reservasikuapp",
+    "storage_bucket": "reservasikuapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:19062788371:android:6b725049859debf4d58ae6",
+        "android_client_info": {
+          "package_name": "com.restaurant.reservation"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQE5pJOHTy-kTSjBc-9Y19nNAfl0_KlIo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

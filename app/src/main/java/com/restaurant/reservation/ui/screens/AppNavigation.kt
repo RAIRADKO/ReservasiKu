@@ -36,7 +36,7 @@ fun AppNavigation(
                 BottomNavigationBar(
                     activeTab = activeTab,
                     onTabChange = { tab -> viewModel.changeTab(tab) },
-                    notificationCount = 2 // Mock notification count
+                    notificationCount = 2
                 )
             }
         ) { paddingValues ->
@@ -46,25 +46,18 @@ fun AppNavigation(
                     .padding(paddingValues)
             ) {
                 AnimatedContent(
-                    targetState = appState,
+                    targetState = activeTab,
                     transitionSpec = {
                         slideInHorizontally { width -> width } + fadeIn() togetherWith
                                 slideOutHorizontally { width -> -width } + fadeOut()
                     },
                     label = "screen_transition"
-                ) { state ->
-                    when (state) {
-                        AppState.HOME -> {
-                            when (activeTab) {
-                                NavigationTab.HOME -> HomeScreen(viewModel = viewModel)
-                                NavigationTab.RESERVATIONS -> ReservationHistoryScreen(viewModel = viewModel)
-                                NavigationTab.NOTIFICATIONS -> NotificationsScreen(viewModel = viewModel)
-                                NavigationTab.PROFILE -> ProfileScreen(viewModel = viewModel)
-                            }
-                        }
-                        AppState.TABLE_SELECTION -> TableSelectionScreen(viewModel = viewModel)
-                        AppState.RESERVATION_DETAILS -> ReservationDetailsScreen(viewModel = viewModel)
-                        else -> HomeScreen(viewModel = viewModel)
+                ) { tab ->
+                    when (tab) {
+                        NavigationTab.HOME -> HomeScreen(viewModel = viewModel)
+                        NavigationTab.RESERVATIONS -> ReservationHistoryScreen(viewModel = viewModel)
+                        NavigationTab.NOTIFICATIONS -> NotificationsScreen(viewModel = viewModel)
+                        NavigationTab.PROFILE -> ProfileScreen(viewModel = viewModel)
                     }
                 }
             }

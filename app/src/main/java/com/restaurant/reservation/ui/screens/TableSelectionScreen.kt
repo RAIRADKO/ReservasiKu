@@ -33,26 +33,20 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import java.util.*
 import java.text.SimpleDateFormat
 import java.util.Locale
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun TableSelectionScreen(viewModel: AppViewModel = viewModel()) {
     var step by remember { mutableStateOf(1) }
     var selectedDate by remember { mutableStateOf("") }
     var selectedTime by remember { mutableStateOf("") }
     var peopleCount by remember { mutableStateOf(2) }
-    var selectedTable by remember { mutableStateOf<Int?>(null) }
-    val tables = listOf(
-        Table(1, 2, "available"),
-        Table(2, 4, "available"),
-        Table(3, 2, "occupied"),
-        Table(4, 6, "available"),
-        Table(5, 4, "available"),
-        Table(6, 8, "occupied"),
-        Table(7, 2, "available"),
-        Table(8, 4, "available")
-    )
-    val availableTables = tables.filter { it.capacity >= peopleCount }
+    var selectedTable by remember { mutableStateOf<String?>(null) }
+    var specialRequests by remember { mutableStateOf("") }
+
+    val tables by viewModel.tables.collectAsState()
+    val availableTables = tables.filter { it.isAvailable && it.capacity >= peopleCount }
 
     val canContinue = when (step) {
         1 -> selectedDate.isNotBlank()
@@ -82,7 +76,7 @@ fun TableSelectionScreen(viewModel: AppViewModel = viewModel()) {
         },
         calendar.get(Calendar.HOUR_OF_DAY),
         calendar.get(Calendar.MINUTE),
-        true // is24HourView
+        true
     )
 
     Scaffold(
@@ -159,7 +153,7 @@ fun TableSelectionScreen(viewModel: AppViewModel = viewModel()) {
                                 horizontalArrangement = Arrangement.Center
                             ) {
                                 IconButton(onClick = { if (peopleCount > 1) peopleCount-- }) {
-                                    Icon(Icons.Default.ArrowBack, contentDescription = "Kurangi")
+                                    Icon(Icons.Default.ArrowBack, contentDescription = stringResource(id = R.string.decrement_people))
                                 }
                                 Text(
                                     text = "$peopleCount ${stringResource(id = R.string.people_count_suffix)}",
@@ -167,7 +161,7 @@ fun TableSelectionScreen(viewModel: AppViewModel = viewModel()) {
                                     modifier = Modifier.padding(horizontal = 16.dp)
                                 )
                                 IconButton(onClick = { peopleCount++ }) {
-                                    Icon(Icons.Default.ArrowForward, contentDescription = "Tambah")
+                                    Icon(Icons.Default.ArrowForward, contentDescription = stringResource(id = R.string.increment_people))
                                 }
                             }
                         }
@@ -179,15 +173,15 @@ fun TableSelectionScreen(viewModel: AppViewModel = viewModel()) {
                             Spacer(modifier = Modifier.height(16.dp))
                             FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                                 tables.forEach { table ->
-                                    val isAvailable = table.status == "available"
+                                    val isAvailable = table.isAvailable
                                     val meetsCapacity = table.capacity >= peopleCount
                                     val isClickable = isAvailable && meetsCapacity
                                     TableCard(
-                                        id = table.id,
+                                        id = table.tableNumber,
                                         seats = table.capacity,
                                         isSelected = selectedTable == table.id,
                                         isClickable = isClickable,
-                                        isOccupied = table.status == "occupied",
+                                        isOccupied = !table.isAvailable,
                                         onClick = {
                                             selectedTable = if (selectedTable == table.id) null else table.id
                                         }
@@ -205,14 +199,19 @@ fun TableSelectionScreen(viewModel: AppViewModel = viewModel()) {
                     if (step < 4) {
                         step++
                     } else {
-                        viewModel.navigateToReservationDetails(
-                            TableSelectionData(
-                                date = selectedDate,
-                                time = selectedTime,
-                                people = peopleCount,
-                                table = selectedTable
+                        val selectedTableData = tables.firstOrNull { it.id == selectedTable }
+                        if (selectedTableData != null) {
+                            viewModel.navigateToReservationDetails(
+                                TableSelectionData(
+                                    date = selectedDate,
+                                    time = selectedTime,
+                                    people = peopleCount,
+                                    restaurantId = selectedTableData.restaurantId,
+                                    tableId = selectedTableData.id,
+                                    specialRequests = specialRequests
+                                )
                             )
-                        )
+                        }
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
@@ -229,7 +228,7 @@ fun TableSelectionScreen(viewModel: AppViewModel = viewModel()) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TableCard(id: Int, seats: Int, isSelected: Boolean, isClickable: Boolean, isOccupied: Boolean, onClick: () -> Unit) {
+fun TableCard(id: String, seats: Int, isSelected: Boolean, isClickable: Boolean, isOccupied: Boolean, onClick: () -> Unit) {
     val containerColor = when {
         isOccupied -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
         isSelected -> PrimaryBlue
@@ -266,7 +265,7 @@ fun TableCard(id: Int, seats: Int, isSelected: Boolean, isClickable: Boolean, is
                 color = contentColor
             )
             Text(
-                text = "$seats ${stringResource(id = R.string.person_count_suffix)}",
+                text = "$seats ${stringResource(id = R.string.people_count_suffix)}",
                 style = MaterialTheme.typography.bodySmall,
                 color = contentColor.copy(alpha = if (isSelected) 0.8f else 0.6f)
             )

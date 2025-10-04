@@ -1,36 +1,8 @@
 package com.restaurant.reservation.model
 
-import kotlinx.serialization.Serializable
+import androidx.compose.runtime.Immutable
 
-@Serializable
-data class User(
-    val name: String,
-    val email: String
-)
-
-@Serializable
-data class Reservation(
-    val id: String,
-    val date: String,
-    val time: String,
-    val table: Int,
-    val people: Int,
-    val status: ReservationStatus
-)
-
-@Serializable
-data class Table(
-    val id: Int,
-    val capacity: Int,
-    val status: String // "available", "occupied"
-)
-
-enum class ReservationStatus {
-    PENDING,
-    CONFIRMED,
-    CANCELLED
-}
-
+@Immutable
 enum class AppState {
     SPLASH,
     ONBOARDING,
@@ -40,6 +12,7 @@ enum class AppState {
     RESERVATION_DETAILS
 }
 
+@Immutable
 enum class NavigationTab {
     HOME,
     RESERVATIONS,
@@ -47,17 +20,64 @@ enum class NavigationTab {
     PROFILE
 }
 
-data class TableSelectionData(
-    val date: String,
-    val time: String,
-    val people: Int,
-    val table: Int? = null
+@Immutable
+data class User(
+    val id: String?,
+    val name: String,
+    val email: String,
+    val phoneNumber: String
 )
 
+@Immutable
+data class Restaurant(
+    val id: String,
+    val name: String,
+    val address: String,
+    val capacity: Int,
+    val openingHours: Map<String, String>
+)
+
+@Immutable
+data class Table(
+    val id: String,
+    val tableNumber: String,
+    val capacity: Int,
+    val restaurantId: String,
+    val isAvailable: Boolean
+)
+
+@Immutable
 data class NotificationItem(
     val id: String,
     val title: String,
     val message: String,
     val timestamp: String,
-    val isRead: Boolean = false
+    val isRead: Boolean
+)
+
+@Immutable
+data class Reservation(
+    val id: String,
+    val date: String,
+    val time: String,
+    val tableId: String, // PERBAIKI: Ganti 'table' menjadi 'tableId'
+    val people: Int,
+    val status: ReservationStatus,
+    val specialRequests: String
+)
+
+enum class ReservationStatus {
+    PENDING,
+    CONFIRMED,
+    CANCELLED
+}
+
+@Immutable
+data class TableSelectionData(
+    val date: String,
+    val time: String,
+    val people: Int,
+    val restaurantId: String,
+    val tableId: String,
+    val specialRequests: String
 )

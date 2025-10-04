@@ -29,11 +29,13 @@ import com.restaurant.reservation.ui.theme.RestaurantReservationTheme
 import com.restaurant.reservation.viewmodel.AppViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
-import androidx.lifecycle.viewmodel.compose.viewModel // Perbaikan: Tambahkan import viewModel()
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.ui.graphics.vector.ImageVector
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ReservationDetailsScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: Gunakan viewModel() untuk membuat instance
+fun ReservationDetailsScreen(viewModel: AppViewModel = viewModel()) {
     val pendingReservation by viewModel.pendingReservation.collectAsState()
 
     if (pendingReservation == null) {
@@ -106,7 +108,7 @@ fun ReservationDetailsScreen(viewModel: AppViewModel = viewModel()) { // Perbaik
                     ReservationDetailRow(
                         icon = Icons.Default.Place,
                         label = stringResource(id = R.string.table_number_label),
-                        value = "${stringResource(id = R.string.table)} #${pendingReservation!!.table}"
+                        value = "${stringResource(id = R.string.table)} #${pendingReservation!!.tableId}"
                     )
                 }
             }

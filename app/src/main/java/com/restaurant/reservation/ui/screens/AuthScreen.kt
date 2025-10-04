@@ -18,6 +18,7 @@ import com.restaurant.reservation.model.User
 import com.restaurant.reservation.ui.theme.PrimaryBlue
 import com.restaurant.reservation.viewmodel.AppViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import java.util.UUID
 
 @Composable
 fun AuthScreen(viewModel: AppViewModel = viewModel()) {
@@ -103,9 +104,9 @@ fun AuthScreen(viewModel: AppViewModel = viewModel()) {
         Button(
             onClick = {
                 if (isLogin) {
-                    viewModel.handleLogin(User(name = "User", email = email))
+                    viewModel.handleLogin(User(id = UUID.randomUUID().toString(), name = "User", email = email, phoneNumber = ""))
                 } else {
-                    viewModel.handleLogin(User(name = name, email = email))
+                    viewModel.handleLogin(User(id = UUID.randomUUID().toString(), name = name, email = email, phoneNumber = ""))
                 }
             },
             modifier = Modifier.fillMaxWidth(),

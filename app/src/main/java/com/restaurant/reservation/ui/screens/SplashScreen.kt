@@ -29,10 +29,10 @@ import com.restaurant.reservation.ui.theme.PrimaryBlue
 import com.restaurant.reservation.ui.theme.TextPrimary
 import com.restaurant.reservation.ui.theme.TextSecondary
 import com.restaurant.reservation.viewmodel.AppViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel // Perbaikan: Tambahkan import viewModel()
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun SplashScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: Gunakan viewModel() untuk membuat instance
+fun SplashScreen(viewModel: AppViewModel = viewModel()) {
     val scale = remember { Animatable(0f) }
 
     LaunchedEffect(Unit) {
@@ -62,7 +62,7 @@ fun SplashScreen(viewModel: AppViewModel = viewModel()) { // Perbaikan: Gunakan 
                 contentAlignment = Alignment.Center
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.ic_restaurant),
+                    painter = painterResource(id = R.mipmap.ic_restaurant),
                     contentDescription = "Restaurant Logo",
                     modifier = Modifier.size(64.dp),
                     // Menggunakan PrimaryBlue sesuai spesifikasi
